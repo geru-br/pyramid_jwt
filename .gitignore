@@ -20,3 +20,5 @@ __pycache__
 .project
 .pydevproject
 .settings/org.eclipse.core.resources.prefs
+.envrc
+.python-version

@@ -31,6 +31,16 @@ def test_token_most_be_str():
     assert isinstance(token, str)
 
 
+def test_token_callable_token():
+
+    def _():
+        return "secret"
+
+    policy = JWTAuthenticationPolicy(_)
+    token = policy.create_token(15)
+    assert isinstance(token, str)
+
+
 def test_minimal_roundtrip():
     policy = JWTAuthenticationPolicy("secret")
     request = Request.blank("/")

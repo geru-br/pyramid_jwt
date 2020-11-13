@@ -53,8 +53,8 @@ class JWTAuthenticationPolicy(CallbackAuthenticationPolicy):
         json_encoder=None,
         audience=None,
     ):
-        self.private_key = private_key
-        self.public_key = public_key if public_key is not None else private_key
+        self._private_key = private_key
+        self._public_key = public_key if public_key is not None else private_key
         self.algorithm = algorithm
         self.leeway = leeway
         self.default_claims = default_claims if default_claims else {}
@@ -75,6 +75,23 @@ class JWTAuthenticationPolicy(CallbackAuthenticationPolicy):
             json_encoder = json_encoder_factory
         self.json_encoder = json_encoder
         self.jwt_std_claims = ("sub", "iat", "exp", "aud")
+
+    @property
+    def private_key(self):
+
+        try:
+            return self._private_key()
+        except TypeError:
+            return self._private_key
+
+    @property
+    def public_key(self):
+
+        try:
+            return self._public_key()
+        except TypeError:
+            return self._private_key
+
 
     def create_token(self, principal, expiration=None, audience=None, **claims):
         payload = self.default_claims.copy()
