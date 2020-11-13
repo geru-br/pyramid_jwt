@@ -62,19 +62,19 @@ def create_jwt_authentication_policy(
 
 def _request_create_token(request, principal, expiration=None, audience=None, **claims):
 
-    return request.authentication_policy.create_token(
+    return request.jwt_authentication_policy.create_token(
         principal, expiration, audience, **claims
     )
 
 
 def _request_claims(request):
-    return request.authentication_policy.get_claims(request)
+    return request.jwt_authentication_policy.get_claims(request)
 
 
 def _configure(config, auth_policy):
     config.set_authentication_policy(auth_policy)
     config.add_request_method(
-        lambda request: auth_policy, "authentication_policy", reify=True
+        lambda request: auth_policy, "jwt_authentication_policy", reify=True
     )
     config.add_request_method(_request_claims, "jwt_claims", reify=True)
     config.add_request_method(_request_create_token, "create_jwt_token")
